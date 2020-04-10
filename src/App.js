@@ -1,26 +1,42 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {connect} from 'react-redux';
 import './App.css';
-
-import Todo from './Todo';
-
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from "react-router-dom";
+import Home from './modules/frontend/home/home';
+import Contact from './modules/frontend/contact/contact';
+import About from './modules/frontend/about/about';
+import DashboardLayoutRoute from "./layouts/frontend";  
+import Products from "./modules/frontend/products/products"
 class App extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      show: false
-    };
-  }
 
   render() {
     return (
-      <div className="App">
-        <Todo />
-      </div>
+    <Router>  
+      <Switch>  
+            <Route exact path="/">  
+            <Redirect to="/home" />  
+            </Route>  
+            <DashboardLayoutRoute exact  path="/products" component={Products} /> 
+            <DashboardLayoutRoute exact  path="/contact" component={Contact} /> 
+            <DashboardLayoutRoute exact  path="/aboutus" component={About} /> 
+            <DashboardLayoutRoute  exact  path="/home"
+            component={props => <Home {...props} name="lol" />}
+            /> 
+      </Switch>  
+    </Router>  
     );
   }
 }
 
-export default App;
+const mapStateToProps =state=>({
+  products :state.products,
+  user :state.user
+});
+
+export default connect(mapStateToProps)(App);
+
